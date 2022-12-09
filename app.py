@@ -1,4 +1,4 @@
-"""core app to run mealcucle"""
+"""core app to run mealcycle"""
 
 import datetime
 import os
@@ -39,11 +39,14 @@ def add_new(new_name=None) -> None:
     df.to_parquet("data.pq")
 
 
+# figure out when each item was last cooked
 df = load_df().groupby("thing", as_index=False).max()
 df = df.sort_values("last_done", ascending=True)
 
 st.write("------------")
 
+
+# make buttons for each item
 for thing in df["thing"]:
     st.button(thing, on_click=add_new, args=(thing,))
 
@@ -51,8 +54,7 @@ for thing in df["thing"]:
 st.write("------------")
 
 
-# make some elements to add new items
-
+# make some UI elements to add new items
 left, right = st.columns([0.8, 0.2])
 
 with left:

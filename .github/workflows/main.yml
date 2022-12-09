@@ -1,4 +1,4 @@
-name: force docstrings
+name: ci checks
 
 on:
   push:
@@ -8,21 +8,30 @@ on:
 
 
 jobs:
-  build:
 
+
+  check_doc_strings:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
+      - name: run Interrogate locally
+        run: |
+          if [ $(interrogate -c pyproject.toml -v . -f 100 | grep "FAILED" | wc -l) = 1 ]; then
+             echo "necessary docstrings missing:"
+             interrogate -vv . -f 100 
+             exit 1
+          fi
 
-    - name: Python Interrogate Check
-      uses: JackMcKew/python-interrogate-check@main
-      with:
-        path: '.'
-        exclude: 'notebooks'
-        fail-under: 100
+
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: psf/black@stable
+
+
+
+
