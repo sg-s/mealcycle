@@ -1,3 +1,5 @@
+"""core app to run mealcucle"""
+
 import datetime
 import os
 
@@ -12,7 +14,8 @@ if "new_meal_name" not in st.session_state:
     st.session_state.new_meal_name = ""
 
 
-def load_df():
+def load_df() -> pd.DataFrame:
+    """read data from disk"""
     if os.path.exists("data.pq"):
         df = pd.read_parquet("data.pq")
     else:
@@ -20,7 +23,8 @@ def load_df():
     return df
 
 
-def add_new(new_name=None):
+def add_new(new_name=None) -> None:
+    """add new entry to dataframe"""
 
     if new_name is None:
         print("new_name is None, reading from session state")
