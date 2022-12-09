@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="mealcycle",
-    version='22.12.8',
+    version="22.12.8",
     packages=find_packages(exclude=("tests", "docs")),
     description="Meal cycler",
     url="https://github.com/sg-s/mealcycle",
