@@ -2,6 +2,8 @@
 *.ipynb
 *.html
 
+nohup.out
+
 # data
 *.pq
 
