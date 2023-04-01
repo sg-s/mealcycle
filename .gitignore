@@ -3,6 +3,7 @@
 *.html
 
 nohup.out
+streamlit.pid
 
 # data
 *.pq

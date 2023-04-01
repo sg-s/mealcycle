@@ -1,0 +1,1 @@
+nohup poetry run streamlit run --server.address $HOSTNAME  --server.port $(less config.ini | grep "streamlit_port" | cut -d = -f 2) app.py > /dev/null 2>&1 & echo $! > streamlit.pid

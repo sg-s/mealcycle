@@ -26,6 +26,8 @@ pip install .
 
 ### Hardware 
 
+This runs on a Mac Studio that is always on. 
+
 ## License 
 
 GPL v3

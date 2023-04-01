@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "mealcycle"
+version = "0.1.0"
+description = "Meal cycler in streamlit"
+authors = ["Srinivas Gorur-Shandilya <code@srinivas.gs>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.9.7 || >3.9.7,<4.0"
+streamlit = "^1.20.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
