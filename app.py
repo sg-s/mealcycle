@@ -52,35 +52,48 @@ def add_new(new_name=None, new_recipe_link=None) -> None:
 df = load_df().groupby("thing", as_index=False).max()
 df = df.sort_values("last_done", ascending=True)
 
-st.write("------------")
+list_tab, new_tab = st.tabs(["List", "Add new"])
 
-# make buttons for each item
-for thing, recipe_link in zip(df["thing"], df["recipe_link"]):
-    with st.container():
-        st.write("## " + thing)
-        left, right = st.columns(2)
-        with left:
+with list_tab:
+    # make buttons for each item
+    for thing, recipe_link in zip(df["thing"], df["recipe_link"]):
+        if len(thing) == 0:
+            continue
+
+        with st.form(key=thing):
+            left, center, right = st.columns([0.6, 0.2, 0.2])
+
+            with left:
+                st.write("### " + thing)
+
+            with right:
+                st.form_submit_button(
+                    label="Cooked",
+                    on_click=add_new,
+                    type="primary",
+                    args=(thing, recipe_link),
+                )
+
             if len(recipe_link) > 0:
-                st.markdown(f"[Recipe]({recipe_link})")
-        with right:
-            st.button("cooked ✅", on_click=add_new, args=(thing,), key=thing)
-        st.write("------------")
+                with st.expander("Recipe"):
+                    st.markdown(f"[Recipe]({recipe_link})")
 
 
-# make some UI elements to add new items
-left, center, right = st.columns([0.4, 0.4, 0.2])
+with new_tab:
+    # make some UI elements to add new items
+    left, center, right = st.columns([0.4, 0.4, 0.2])
 
-with left:
-    new_meal = st.text_input(
-        "Add new meal", key="new_meal_name", placeholder="Meal name"
-    )
+    with left:
+        new_meal = st.text_input(
+            "Add new meal", key="new_meal_name", placeholder="Meal name"
+        )
 
-with center:
-    new_meal_recipe = st.text_input(
-        "", key="new_meal_recipe", placeholder="Link to recipe"
-    )
+    with center:
+        new_meal_recipe = st.text_input(
+            "", key="new_meal_recipe", placeholder="Link to recipe"
+        )
 
-with right:
-    st.write("")
-    st.write("")
-    st.button("Add", type="primary", on_click=add_new)
+    with right:
+        st.write("")
+        st.write("")
+        st.button("Add", type="primary", on_click=add_new)
