@@ -1,13 +1,17 @@
 """core app to run mealcycle"""
 
 import datetime
+import glob
 import os
 
 import pandas as pd
 import streamlit as st
+from unidecode import unidecode
+
+st.set_page_config(page_title="Mealcycle")
+
 
 st.write("# Mealcycle")
-
 
 if "new_meal_name" not in st.session_state:
     st.session_state.new_meal_name = ""
@@ -54,29 +58,47 @@ df = df.sort_values("last_done", ascending=True)
 
 list_tab, new_tab = st.tabs(["List", "Add new"])
 
+
 with list_tab:
     # make buttons for each item
     for thing, recipe_link in zip(df["thing"], df["recipe_link"]):
         if len(thing) == 0:
             continue
 
-        with st.form(key=thing):
+        with st.container():
             left, center, right = st.columns([0.6, 0.2, 0.2])
 
             with left:
-                st.write("### " + thing)
+                st.write("## " + thing)
 
             with right:
-                st.form_submit_button(
+                st.button(
                     label="Cooked",
                     on_click=add_new,
                     type="primary",
                     args=(thing, recipe_link),
+                    key=thing,
                 )
 
-            if len(recipe_link) > 0:
-                with st.expander("Recipe"):
-                    st.markdown(f"[Recipe]({recipe_link})")
+            # check if we have a recipe for this
+            files = glob.glob("recipes/*.md")
+
+            file = unidecode(thing.lower().strip())
+
+            if f"recipes/{file}.md" in files:
+                container = st.container()
+
+                with open(f"recipes/{file}.md", "r") as f:
+                    txt = f.read()
+
+                with center:
+                    if st.button("Recipe", key=thing + "recipe"):
+                        container.write(txt)
+
+            else:
+                st.write(unidecode(thing.lower().strip()))
+
+            st.write("---------")
 
 
 with new_tab:
