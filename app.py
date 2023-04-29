@@ -60,9 +60,16 @@ list_tab, new_tab = st.tabs(["List", "Add new"])
 
 
 with list_tab:
+    st.text_input("Filter items", key="list_filter")
+
+    st.write("\n")
+
     # make buttons for each item
     for thing, recipe_link in zip(df["thing"], df["recipe_link"]):
         if len(thing) == 0:
+            continue
+
+        if st.session_state.list_filter.lower() not in thing.lower():
             continue
 
         with st.container():
@@ -72,6 +79,7 @@ with list_tab:
                 st.write("## " + thing)
 
             with right:
+                st.write("\n")
                 st.button(
                     label="Cooked",
                     on_click=add_new,
@@ -92,11 +100,9 @@ with list_tab:
                     txt = f.read()
 
                 with center:
+                    st.write("\n")
                     if st.button("Recipe", key=thing + "recipe"):
                         container.write(txt)
-
-            else:
-                st.write(unidecode(thing.lower().strip()))
 
             st.write("---------")
 
